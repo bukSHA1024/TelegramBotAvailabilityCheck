@@ -9,4 +9,8 @@
     <PackageReference Include="Telegram.Bot" Version="17.0.0" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y $(ProjectDir)secret.token  $(ProjectDir)$(OutDir)" />
+  </Target>
+
 </Project>
