@@ -10,9 +10,9 @@ using File = System.IO.File;
 
 namespace TelegramBotAvailabilityCheck
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             var secretToken = ReadSecretToken();
             var bot = CreateBot(secretToken);
@@ -25,7 +25,7 @@ namespace TelegramBotAvailabilityCheck
             Console.ReadLine();
         }
 
-        private static void ConfigureBot(TelegramBotClient bot, CancellationToken cancellationToken)
+        private static void ConfigureBot(ITelegramBotClient bot, CancellationToken cancellationToken)
         {
             var receiverOptions = new ReceiverOptions
             {
@@ -40,7 +40,7 @@ namespace TelegramBotAvailabilityCheck
             );
         }
 
-        static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        private static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             if (update.Message is { } message)
             {
@@ -48,7 +48,7 @@ namespace TelegramBotAvailabilityCheck
             }
         }
 
-        static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        private static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             if (exception is ApiRequestException apiRequestException)
             {
@@ -58,12 +58,12 @@ namespace TelegramBotAvailabilityCheck
 
         private static TelegramBotClient CreateBot(string secretToken)
         {
-            return new TelegramBotClient(secretToken);
+            return new(secretToken);
         }
 
         private static string ReadSecretToken()
         {
-            var pathToSecretFile = @"./secret.token";
+            const string pathToSecretFile = @"./secret.token";
             string[] token;
             try
             {
